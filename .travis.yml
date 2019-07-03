@@ -4,6 +4,9 @@ sudo: required
 services:
 - docker
 
+env:
+- CHANGE_MINIKUBE_NONE_USER=true
+
 before_install:
 # Upgrade Docker
 - sudo apt-get update
@@ -12,9 +15,14 @@ before_install:
 install:
 - scripts/ci/install-deps.sh
 
+before_script:
+- sudo minikube start --memory=4096 --vm-driver=none
+- sudo chown -R $USER ${HOME}/.{mini,}kube
+
 jobs:
   include:
     - name: Verify minikube
       script:
       - minikube version
+      - minikube status
 
