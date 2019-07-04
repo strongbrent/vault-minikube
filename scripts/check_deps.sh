@@ -11,7 +11,7 @@ set -e
 # OUT: NONE
 check_binary() {
 
-    if ! command -v "${1}"; then
+    if ! command -v "${1}" &> /dev/null; then
         error "ERROR: Can't find ${1} in your PATH"
         error "Please install ${1}"
         exit -1
