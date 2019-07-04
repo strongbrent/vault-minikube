@@ -2,6 +2,8 @@
 
 set -e
 
+. ./lib/functions.sh
+
 # --- Helper Functions ---------------------------------------------------
 
 # DESC: checks if a specified binary exists in the search path
@@ -40,3 +42,4 @@ main() {
         check_binary "${dep}"
     done
 }
+
