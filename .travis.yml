@@ -19,10 +19,6 @@ before_script:
 - sudo minikube start --memory=4096 --vm-driver=none
 - sudo chown -R $USER ${HOME}/.{mini,}kube
 
-jobs:
-  include:
-    - name: Verify minikube
-      script:
-      - minikube version
-      - minikube status
-
+script:
+- echo "${GOPATH}"
+- echo "${PATH}"
