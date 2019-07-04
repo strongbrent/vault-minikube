@@ -4,13 +4,13 @@ set -e
 
 # --- Pretty Print Helper Functions --------------------------------------
 
-# DESC: Pretty printing functions inspired from
+# DESC: pretty printing functions inspired from
 #       https://github.com/Sajjadhosn/dotfiles
-# ARGS: $1 (REQ): String text message
-#       $2 (REQ): Text color
-#       $3 (REQ): Arrow (string representation)
-# OUT: NONE
-function coloredEcho() {
+# ARGS: $1 (REQ): string text message
+#       $2 (REQ): text color
+#       $3 (REQ): arrow (string representation)
+# OUT:  NONE
+coloredEcho() {
     # function vars/constants
     local color="${2}"
 
@@ -34,50 +34,50 @@ function coloredEcho() {
 }
 
 
-# DESC: Print an error message
-# ARGS: $1: String text message
-# OUT: printed string message
-function error() {
+# DESC: prints an error message
+# ARGS: $1: string text message
+# OUT:  printed string message
+error() {
     coloredEcho "${1}" red "========>"
 }
 
 
-# DESC: Print an info message
-# ARGS: $1: String text message
-# OUT: printed string message
-function info() {
+# DESC: prints an info message
+# ARGS: $1: string text message
+# OUT:  printed string message
+info() {
     coloredEcho "${1}" blue "========>"
 }
 
 
-# DESC: Print a success message
-# ARGS: $1: String text message
-# OUT: printed string message
-function success() {
+# DESC: prints a success message
+# ARGS: $1: string text message
+# OUT:  printed string message
+success() {
     coloredEcho "${1}" green "========>"
 }
 
 
-# DESC: print a substep error message
-# ARGS: $1: String text message
-# OUT: printed string message
-function substep_error() {
+# DESC: prints a substep error message
+# ARGS: $1: string text message
+# OUT:  printed string message
+substep_error() {
     coloredEcho "${1}" red "===="
 }
 
 
-# DESC: print a substep info message
-# ARGS: $1: String text message
-# OUT: printed string message
-function substep_info() {
+# DESC: prints a substep info message
+# ARGS: $1: string text message
+# OUT:  printed string message
+substep_info() {
     coloredEcho "${1}" magenta "===="
 }
 
 
-# DESC: print a substep success message
-# ARGS: $1: String text message
-# OUT: printed string message
-function substep_success() {
+# DESC: prints a substep success message
+# ARGS: $1: string text message
+# OUT:  printed string message
+substep_success() {
     coloredEcho "${1}" cyan "===="
 }
 
