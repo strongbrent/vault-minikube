@@ -66,6 +66,14 @@ main() {
     echo "Installing Cloudflare's cfssl toolkit"
     go get -u github.com/cloudflare/cfssl/cmd/cfssl
     go get -u github.com/cloudflare/cfssl/cmd/cfssljson
+
+    echo ""
+    echo "Sanity test for: cfssl"
+    command -v cfssl
+
+    echo ""
+    echo "Sanity test for: cfssljson"
+    command -v cfssljson
 }
 
 main $@
