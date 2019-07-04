@@ -60,6 +60,12 @@ main() {
     # Short URL for minikube v1.2.0
     MINIKUBE_URL="http://bit.ly/2XjdOYe"
     install_bin minikube "${MINIKUBE_URL}"
+
+    # Install Cloudflare's cfssl toolkit
+    echo ""
+    echo "Installing Cloudflare's cfssl toolkit"
+    go get -u github.com/cloudflare/cfssl/cmd/cfssl
+    go get -u github.com/cloudflare/cfssl/cmd/cfssljson
 }
 
 main $@
