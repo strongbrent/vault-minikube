@@ -2,7 +2,7 @@
 
 set -e
 
-. ./lib/functions.sh
+. lib/functions.sh
 
 # --- Helper Functions ---------------------------------------------------
 
@@ -43,3 +43,5 @@ main() {
     done
 }
 
+
+main $@
