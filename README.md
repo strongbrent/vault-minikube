@@ -119,3 +119,4 @@ Now you can run `make workstation` to re-deploy fresh Kubernetes resources again
 ```
 $ make destroy
 ```
+
