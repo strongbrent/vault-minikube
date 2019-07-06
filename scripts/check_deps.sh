@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 . lib/functions.sh
 
 # --- Helper Functions ---------------------------------------------------
