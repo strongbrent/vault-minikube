@@ -25,3 +25,13 @@ script:
 
 # Test idempotency (no clobbering)
 - make workstation
+
+# Test teardown
+- make clean
+
+# Test teardown idempotency
+- make clean
+
+# Test destroy
+- make destroy
+

@@ -48,4 +48,75 @@ $ minikube start --vm-driver=virtualbox
 $ minikube dashboard
 ```
 
-TODO: More to follow...
+### Clone this repo
+Kind of goes without saying. Clone and then navigate as follows:
+```
+$ cd vault-kubernetes
+```
+
+### Deploy the cluster
+```
+$ make workstation
+```
+
+## Quick Test
+Set Vault specific Environment Variables:
+```
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_CACERT="certs/ca.pem"
+```
+
+Ensure Vault client is installed. Then init Vault using a single key (DO NOT do this in production):
+```
+vault operator init -key-shares=1 -key-threshold=1
+```
+
+Take note of the unseal key and the initial root token. For example:
+```
+Unseal Key 1: F0Snz/ubK2IEdQ4a8WGECianyueTiIwsKAvV0XXYp4Y=
+
+Initial Root Token: 8GIwICNI9Pn3dO9JFNnuUhTi
+```
+
+Unseal Vault:
+```
+$ vault operator unseal
+Unseal Key (will be hidden): <paste Unseal Key 1>
+```
+
+Authenticate with the root token:
+```
+$ vault login
+Token (will be hidden): <paste Initial Root Token>
+```
+
+Create a test secret:
+```
+$ vault kv put secret/precious mysecret=mysecretvalue
+
+Success! Data written to: secret/precious
+```
+
+Read the test secret:
+```
+$ vault kv get secret/precious
+=== Data ===
+Key       Value
+---       -----
+mysecret  mysecretvalue
+```
+
+## Tearing Everything Down
+
+If you want to remove all the Kubernetes resources and start all over (without creating a new minikube cluster), then run the following:
+```
+$ make clean
+```
+
+Now you can run `make workstation` to re-deploy fresh Kubernetes resources again.
+
+**HOWEVER**, if you want to tear down the whole works and delete minikube, you can type:
+```
+$ make destroy
+```
+
