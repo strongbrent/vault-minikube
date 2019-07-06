@@ -23,6 +23,10 @@ main() {
     k8s_configmap ${app_name} ${consul_ns}
 
     echo ""
+    echo "--- Creating Service for: ${app_name} ---"
+    k8s_service ${app_name} ${consul_ns}
+
+    echo ""
     echo "--- Creating StatefulSet for: ${app_name} ---"
     k8s_statefulset ${app_name} ${consul_ns}
 
