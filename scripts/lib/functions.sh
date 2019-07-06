@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
-
 # --- K8s Helper Functions -----------------------------------------------
 
 # DESC: generates gossip protocol encryption key
@@ -12,11 +9,7 @@ set -e
 # OUT:  NONE
 gossip_encryption_key() {
     # set namespace
-    if [[ -z $3+x ]]; then
-        local ns="default"
-    else
-        local ns="${3}"
-    fi
+    local -r ns="${3:-default}"
 
     # Run K8s command
     if ! kubectl get secrets -n ${ns} | grep ${2} &> /dev/null; then
@@ -48,11 +41,7 @@ gossip_encryption_key() {
 # OUT:  NONE
 k8s_configmap() {
     # Set namespace
-    if [ -z ${2+x} ]; then
-        local ns="default"
-    else
-        local ns="${2}"
-    fi
+    local -r ns="${2:-default}"
 
     # Run K8s command
     if ! kubectl get configmaps -n ${ns} | grep ${1} &> /dev/null; then
@@ -73,19 +62,33 @@ k8s_configmap() {
 }
 
 
+# DESC: deletes a k8s ConfigMap
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_configmap_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run K8s command
+    if kubectl get configmaps -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl delete configmap -n ${ns} ${1} &> /dev/null
+        success "Deleted ConfigMap: ${1}"
+    else
+        info "Already deleted ConfigMap: ${1}"
+    fi
+}
+
+
 # DESC: performs port-forwarding in the background
 # ARGS: #1 (REQ): pod name
 #       $2 (REQ): local port
 #       $3 (REQ): pod port
 #       $4 (OPT): namespace
-# OUT:  None
+# OUT:  NONE
 k8s_port_forwarding() {
     # Set namespace
-    if [ -z ${4+x} ]; then
-        local ns="default"
-    else
-        local ns="${4}"
-    fi
+    local -r ns="${4:-default}"
 
     # Run K8s command
     if ! ps aux | grep "[k]ubectl -n ${ns} port-forward" | grep ${1} &> /dev/null; then
@@ -105,17 +108,94 @@ k8s_port_forwarding() {
 }
 
 
+# DESC: deletes persistent volume claims
+# ARGS: $1: (REQ): application name (label)
+#       $2: (OPT): namespace
+# OUT:  NONE
+k8s_pvc_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run the K8s command
+    if kubectl get pvc -n ${ns} | grep ${1} &> /dev/null; then
+        substep_info "...this could take a few moments"
+        kubectl delete pvc -n ${ns} -l app=${1} &> /dev/null
+        success "Deleted persistemt volume claims for: ${1}"
+    else
+        info "Already deleted persistemt volume claims for: ${1}"
+    fi
+}
+
+
+# DESC: deletes a K8s Secret
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_secret_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run the K8s command
+    if kubectl get secret ${1} -n ${ns} &> /dev/null; then
+        kubectl delete secret ${1} -n ${ns} &> /dev/null
+        success "Deleted Secret for: ${1}"
+    else
+        info "Already deleted Secret for: ${1}"
+    fi
+}
+
+
+# DESC: creates a k8s Service
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_service() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run K8s command
+    if ! kubectl get service ${1} -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl create -n ${ns} -f ${1}/service.yaml &> /dev/null
+        success "Created Service: ${1}"
+    else
+        info "Already created Service: ${1}"
+    fi
+
+    # Check K8s command sanity
+    info "Testing to see if Service: ${1} is sane..."
+    if ! kubectl get service ${1} -n ${ns} &> /dev/null; then
+        substep_error "ERROR: can NOT find Service: ${1}!"
+    else
+        substep_info "Service: ${1} looks good"
+    fi
+}
+
+
+# DESC: deletes a k8s Service
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_service_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run the K8s command
+    if kubectl get service -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl delete service ${1} -n ${ns} &> /dev/null
+        success "Deleted Service: ${1}"
+    else
+        info "Already deleted Service: ${1}"
+    fi
+}
+
+
 # DESC: creates a K8s StatefulSet
 # ARGS: $1 (REQ): application name
 #       $2 (OPT): namespace
 # OUT:  NONE
 k8s_statefulset() {
     # Set namespace
-    if [ -z $2+x} ]; then
-        local ns="default"
-    else
-        local ns="${2}"
-    fi
+    local -r ns="${2:-default}"
 
     # Run K8s command
     if ! kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
@@ -149,6 +229,24 @@ k8s_statefulset() {
         exit 1
     else
         substep_info "Pods for: ${1} look good"
+    fi
+}
+
+
+# DESC: deletes a k8s StatefulSet
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_statefulset_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run K8s command
+    if kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl delete statefulset ${1} -n ${ns} &> /dev/null
+        success "Deleted StatefulSet: ${1}"
+    else
+        info "Already deleted StatefulSet: ${1}"
     fi
 }
 
