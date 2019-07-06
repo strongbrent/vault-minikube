@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-.PHONY: workstation deps certs consul clean
+.PHONY: workstation deps certs consul clean destroy
 
 workstation: deps certs consul
 
@@ -15,4 +15,8 @@ consul:
 
 clean:
 	(cd scripts && ./cleanup.sh)
+
+destroy: clean
+	$(info --- Deleting Minikube ---)
+	minikube delete
 
