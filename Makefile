@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-.PHONY: workstation deps certs consul
+.PHONY: workstation deps certs consul clean
 
 workstation: deps certs consul
 
@@ -12,4 +12,7 @@ certs:
 
 consul:
 	(cd scripts && ./deploy_consul.sh)
+
+clean:
+	(cd scripts && ./cleanup.sh)
 
