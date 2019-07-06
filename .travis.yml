@@ -25,3 +25,18 @@ script:
 
 # Test idempotency (no clobbering)
 - make workstation
+
+# Test to ensure tha consul is running
+- curl -LI http://localhost:8500/ui/dc1/services -o /dev/null -w '%{http_code}\n' -s
+
+  # TODO: Test to ensure that vault is running 
+
+# Test teardown
+- make clean
+
+# Test teardown idempotency
+- make clean
+
+# Test destroy
+- make destroy
+
