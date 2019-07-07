@@ -93,6 +93,8 @@ Token (will be hidden): <paste Initial Root Token>
 Enable the kv secrets engine at: secret/
 ```
 $ vault secrets enable -path=secret/ kv
+
+Success! Enabled the kv secrets engine at: secret/
 ```
 
 Create a test secret:
