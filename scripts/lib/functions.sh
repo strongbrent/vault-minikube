@@ -20,7 +20,7 @@ gossip_encryption_key() {
             --from-file=${1}/ca.pem \
             --from-file=${1}/${2}.pem \
             --from-file=${1}/${2}-key.pem
-        success "Create: gossip encryption key"
+        success "Created: gossip encryption key"
     else
         info "Already created: gossip encryption key"
     fi
@@ -76,6 +76,68 @@ k8s_configmap_delete() {
         success "Deleted ConfigMap: ${1}"
     else
         info "Already deleted ConfigMap: ${1}"
+    fi
+}
+
+
+# DESC: creates a K8s Deployment
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_deployment() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run K8s command
+    if ! kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl apply -n ${ns} -f ${1}/deployment.yaml
+        success "Applying Deployment for: ${1}"
+
+        # Wait for pods to launch
+        substep_info "Waiting for pods to launch for: ${1}"
+        sleep 15
+
+        POD=$(kubectl get pods -n ${ns} -o=name | grep ${1} | sed "s/^.\{4\}//")
+        while true
+        do
+            STATUS=$(kubectl get pods ${POD} -n ${ns} -o jsonpath="{.status.phase}")
+            if [[ "$STATUS" == "Running" ]]; then
+                substep_info "Pod status: RUNNING"
+                break
+            else
+                substep_info "Pod status: ${STATUS}"
+                sleep 5
+            fi
+        done
+    else
+        info "Already applied Deployment for: ${1}"
+    fi
+
+    # Check K8s command sanity
+    info "Testing to see if Deployment: ${1} is sane..."
+    if ! kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
+        substep_error "ERROR: can NOT find Pods for: ${1}!"
+        exit 1
+    else
+        substep_info "Pods for: ${1}: look good"
+    fi
+}
+
+
+# DESC: deletes a K8s Deployment
+# ARGS: $1 (REQ): application name
+#       $2 (OPT): namespace
+# OUT:  NONE
+k8s_deployment_delete() {
+    # Set namespace
+    local -r ns="${2:-default}"
+
+    # Run the K8s command
+    if kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
+        kubectl delete deployment ${1} -n ${ns} &> /dev/null
+        success "Deleted Deployment for: ${1}"
+    else
+        info "Already deleted Deployment for: ${1}"
     fi
 }
 
@@ -225,7 +287,7 @@ k8s_statefulset() {
     # Check K8s sanity
     info "Testing to see if StatefulSet: ${1} is sane..."
     if ! kubectl get pods -n ${ns} | grep ${1} &> /dev/null; then
-        substep_error "ERROR: can NOT file Pods for: ${1}!"
+        substep_error "ERROR: can NOT find Pods for: ${1}!"
         exit 1
     else
         substep_info "Pods for: ${1} look good"
@@ -247,6 +309,37 @@ k8s_statefulset_delete() {
         success "Deleted StatefulSet: ${1}"
     else
         info "Already deleted StatefulSet: ${1}"
+    fi
+}
+
+
+# DESC: store K8s certificates in a Secret
+# ARGS: $1 (REQ): certs dir
+#       $2 (REQ): application name
+#       $3 (OPT): namespace
+# OUT:  NONE
+k8s_store_certs() {
+    # Set namespace
+    local -r ns="${3:-default}"
+
+    # Run K8s Command
+    if ! kubectl get secrets -n ${ns} | grep ${2} &> /dev/null; then
+        kubectl create secret generic ${2} -n ${ns} \
+            --from-file=${1}/ca.pem \
+            --from-file=${1}/${2}.pem \
+            --from-file=${1}/${2}-key.pem
+        success "Certs stored as a Secret for: ${2}"
+    else
+        info "Certs already stored as a Secret for: ${2}"
+    fi
+
+    # Check K8s command sanity
+    info "Testing to see if storing certs as a Secret for: ${2} is sane..."
+    if ! kubectl describe secret ${2} -n ${ns} &> /dev/null; then
+        substep_error "ERROR: can NOT file Secret for: ${2}"
+        exit 1
+    else
+        substep_info "Secret for: ${2} looks good"
     fi
 }
 
