@@ -6,12 +6,26 @@
 main () {
     # main function vars/constants
     local -r certs_dir="certs"
+    local -r vault_app_name="vault"
+    local -r "vault_ns"="default"
     local -r consul_app_name="consul"
     local -r consul_ns="default"
 
     echo ""
     echo "--- Halting all port-forwarding ---"
     pkill kubectl
+
+    echo ""
+    echo "--- Deleting Deployment: vault ---"
+    k8s_deployment_delete ${vault_app_name} ${vault_ns}
+
+    echo ""
+    echo "--- Deleting Service: vault ---"
+    k8s_service_delete ${vault_app_name} ${vault_ns}
+
+    echo ""
+    echo "--- Deleting ConfigMap: vault ---"
+    k8s_configmap_delete ${vault_app_name} ${vault_ns}
 
     echo ""
     echo "--- Deleting StatefulSet: consul ---"

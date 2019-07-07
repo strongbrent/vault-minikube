@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 .PHONY: workstation deps certs consul clean destroy
 
-workstation: deps certs consul
+workstation: deps certs consul vault
 
 deps:
 	(cd scripts && ./check_deps.sh)
@@ -12,6 +12,9 @@ certs:
 
 consul:
 	(cd scripts && ./deploy_consul.sh)
+
+vault:
+	(cd scripts && ./deploy_vault.sh)
 
 clean:
 	(cd scripts && ./cleanup.sh)
