@@ -12,5 +12,5 @@ spec:
       protocol: TCP
       name: vault
   selector:
-app: vault
+    app: vault
 
