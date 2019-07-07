@@ -63,7 +63,7 @@ $ make workstation
 Set Vault specific Environment Variables:
 ```
 export VAULT_ADDR=https://127.0.0.1:8200
-export VAULT_CACERT="certs/ca.pem"
+export VAULT_CACERT="scripts/certs/ca.pem"
 ```
 
 Ensure Vault client is installed. Then init Vault using a single key (DO NOT do this in production):
@@ -88,6 +88,11 @@ Authenticate with the root token:
 ```
 $ vault login
 Token (will be hidden): <paste Initial Root Token>
+```
+
+Enable the kv secrets engine at: secret/
+```
+$ vault secrets enable -path=secret/ kv
 ```
 
 Create a test secret:
