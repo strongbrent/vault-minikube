@@ -15,7 +15,7 @@ It is much easier to follow these instruction if you already have [Homebrew](htt
 | ----------- | ------- | -------------------------- |
 | [Docker](https://docs.docker.com/docker-for-mac/install/) | 18.09.1 | `brew install docker` |
 | [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) | Client Version: v1.15.0 | `brew install kubectl` |
-| [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | TODO | `brew cask install virtualbox` | 
+| [VirtualBox](https://www.virtualbox.org/wiki/Downloads) | 5.2.22 | `brew cask install virtualbox` | 
 | [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) | v1.2.0 | `brew cask install minikube` |
 | Hashicorp [consul](https://www.consul.io/) client | v1.4.0 | `brew install consul` |
 | Hashicorp [vault](https://www.vaultproject.io/) client| v1.0.2 | `brew install vault` |
