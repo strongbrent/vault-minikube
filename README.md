@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/strongbrent/vault-minikube.svg?branch=master)](https://travis-ci.org/strongbrent/vault-minikube)
 
-Running Hashicorp's Running Vault and Consul in Minikube.
+Running Hashicorp's Vault and Consul in Minikube.
 
 Based on this blog [post](https://testdriven.io/blog/running-vault-and-consul-on-kubernetes/) created by [Michael Herman](https://github.com/mjhea0).
 
