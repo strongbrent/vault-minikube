@@ -1,4 +1,4 @@
-# Hashicorp's Vault and Consul using Kubernets
+# Hashicorp's Vault and Consul using Kubernetes
 
 [![Build Status](https://travis-ci.org/strongbrent/vault-minikube.svg?branch=master)](https://travis-ci.org/strongbrent/vault-minikube)
 
