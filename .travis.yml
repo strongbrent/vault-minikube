@@ -4,6 +4,11 @@ sudo: required
 services:
 - docker
 
+language: go
+
+go:
+- master
+
 env:
 - CHANGE_MINIKUBE_NONE_USER=true
 
