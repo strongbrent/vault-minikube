@@ -6,7 +6,7 @@ Running Hashicorp's Vault and Consul in Minikube.
 
 Based on this blog [post](https://testdriven.io/blog/running-vault-and-consul-on-kubernetes/) created by [Michael Herman](https://github.com/mjhea0).
 
-**NOTE**: these instuctions assume that your workstation is a Mac. For example, this installation was manually tested on a 2017 MacBook (3.1GHz Intel Core I7 with 16GB of memory) running macOS Mojave (v10.14.2). All automated tested was conducted using Travis CI (xenial with docker and minikube installed using `--vm-driver=none`).
+**NOTE**: these instuctions assume that your workstation is a Mac. For example, this installation was manually tested on a 2017 MacBook (3.1GHz Intel Core I7 with 16GB of memory) running macOS Mojave (v10.14.2). All automated testing was conducted using Travis CI (xenial with docker and minikube installed using `--vm-driver=none`).
 
 ## Requirements
 It is much easier to follow these instruction if you already have [Homebrew](https://brew.sh/) installed on your Mac. Click this [link](https://brew.sh/) for installation instructions.
